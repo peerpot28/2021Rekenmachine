@@ -8,7 +8,6 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import static javafx.scene.input.KeyEvent.KEY_PRESSED;
@@ -25,37 +24,37 @@ public class JavaFXApp extends Application {
     private static final String MULTIPLY = "*";
     private static final String DIVIDE = "/";
 
-    private int getNumberFromTextField (TextField textField) {
-        return Integer.parseInt (textField.getText ());
+    private void getNumberFromTextField (TextField textField) {
+        textField.getText();
     }
 
-    protected int computeAdd (int number1, int number2) {
+    protected int computeAdd () {
         return 0;
     }
 
-    protected int computeMultiply (int number1, int number2) {
+    protected int computeMultiply () {
         return 0;
     }
 
-    protected int computeDivide (int number1, int number2) {
+    protected int computeDivide () {
         return 0;
     }
 
     private void compute (String operator) {
 
         int result;
-        int number1 = getNumberFromTextField (txtNumber1);
-        int number2 = getNumberFromTextField (txtNumber2);
+        getNumberFromTextField(txtNumber1);
+        getNumberFromTextField(txtNumber2);
 
         switch (operator) {
             case PLUS:
-                result = computeAdd (number1, number2);
+                result = computeAdd ();
                 break;
             case MULTIPLY:
-                result = computeMultiply (number1, number2);
+                result = computeMultiply ();
                 break;
             case DIVIDE:
-                result = computeDivide (number1, number2);
+                result = computeDivide ();
                 break;
             default:
                 result = 0;
@@ -64,29 +63,19 @@ public class JavaFXApp extends Application {
         txtResult.setText (String.valueOf (result));
     }
 
-    EventHandler<MouseEvent> mouseHandler = new EventHandler<MouseEvent> () {
-        @Override
-        public void handle(MouseEvent mouseEvent) {
-            compute (((Button) mouseEvent.getSource()).getText ());
-        }
-    };
+    EventHandler<MouseEvent> mouseHandler = mouseEvent -> compute (((Button) mouseEvent.getSource()).getText ());
 
-    EventHandler<KeyEvent> keyHandler = new EventHandler<KeyEvent> () {
-        @Override
-        public void handle (KeyEvent keyEvent) {
-            compute(((Button) keyEvent.getSource ()).getText ());
-        }
-    };
+    EventHandler<KeyEvent> keyHandler = keyEvent -> compute(((Button) keyEvent.getSource ()).getText ());
 
     /*
      * Er wordt een label toegevoegd aan het scherm.
      */
-    private void addLabel (String text, int width, int height, int x, int y) {
+    private void addLabel (String text, int y) {
         Label label = new Label (text);
         label.setFocusTraversable (false);
-        label.setPrefWidth (width);
-        label.setPrefHeight (height);
-        label.setLayoutX (x);
+        label.setPrefWidth (161);
+        label.setPrefHeight (71);
+        label.setLayoutX (10);
         label.setLayoutY (y);
         label.setFont (new Font ("System Bold", 18.0));
         rootPane.getChildren ().add (label);
@@ -112,12 +101,12 @@ public class JavaFXApp extends Application {
      * Er wordt een button toegevoegd aan het scherm en event handlers voor het verwerken van een mouse-klik of het
      * selecteren van een toets op het toetsenbord wordt gekoppeld aan deze button.
      */
-    private void addButton (String label, int width, int x, int y) {
+    private void addButton (String label, int x) {
         Button button = new Button (label);
         button.setFocusTraversable (true);
-        button.setPrefWidth (width);
+        button.setPrefWidth (160);
         button.setLayoutX (x);
-        button.setLayoutY (y);
+        button.setLayoutY (105);
         button.setFont (new Font ("System Bold", 18.0));
         button.addEventHandler (MOUSE_CLICKED, mouseHandler);
         button.addEventHandler (KEY_PRESSED, keyHandler);
@@ -125,7 +114,7 @@ public class JavaFXApp extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
 
         rootPane = new Pane();
         rootPane.setMinSize (500,205);
@@ -138,13 +127,13 @@ public class JavaFXApp extends Application {
          * Hieronder worden 2 textfields (voor het invoeren van getallen), 3 buttons (voor bewerkingen op die getallen)
          * en 1 resultaatveld toegevoegd.
          */
-        addLabel ("Getal1", 161, 71, 10, 0);
+        addLabel ("Getal1", 0);
         txtNumber1 = addTextField ("Voer hier het eerste getal in...", true, 310, 181, 15);
-        addLabel ("Getal 2", 161, 71, 10, 40);
+        addLabel ("Getal 2", 40);
         txtNumber2 = addTextField ("Voer hier het tweede getal in...", true, 310, 181, 55);
-        addButton (PLUS, 160, 10, 105);
-        addButton (MULTIPLY, 160, 170, 105);
-        addButton (DIVIDE, 160, 330, 105);
+        addButton (PLUS, 10);
+        addButton (MULTIPLY, 170);
+        addButton (DIVIDE, 330);
         txtResult = addTextField ("Hier wordt het resultaat getoond...", false, 480, 10, 155);
         txtResult.setEditable (false);
 
